@@ -170,9 +170,28 @@ class shops extends entities{
     void process_order(ArrayList<delivery_agent> list_dlv, orders ord){
         delivery_agent temp_dl = new delivery_agent();
         temp_dl = ord.dlvr_agnt;
+        this.ords_to_prcss.remove(ord);
+
+        int num_copies = this.inventory.get(ord.prdt_to_dlvr) - 1;
+
+        if (num_copies == 0) {
+            this.inventory.remove(ord.prdt_to_dlvr); // if the number of copies of the given product becomes 0, remove it
+        }
+        else{
+            this.inventory.put(ord.prdt_to_dlvr, num_copies); // else update the number of copies in the inventory of shop
+        }
+
+        // updating the number of products delivered by a delivery agent
         list_dlv.remove(temp_dl);
         temp_dl.prdcts_dlvr = temp_dl.prdcts_dlvr + 1;
         list_dlv.add(temp_dl);
+    }
+    void add_prdcts(HashMap<product, Integer> invntry, product p, int num_copies){
+        boolean b1 = invntry.containsKey(p);
+        if (b1) {
+            num_copies = num_copies + invntry.get(p);
+        }
+        invntry.put(p, num_copies);
     }
 }
 
