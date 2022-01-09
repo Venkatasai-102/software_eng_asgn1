@@ -424,9 +424,10 @@ public class asgn1_20CS10067 {
                             int zip;
                             String name;
                             System.out.println("Enter the name, id and zipcode of the customer");
-                            zip = sc.nextInt();
-                            id_cstmr = sc.nextInt();
                             name = sc.next();
+                            id_cstmr = sc.nextInt();
+                            zip = sc.nextInt();
+                            
                             customer temp = new customer(id_cstmr, name, zip);
                             list_cstmr.add(temp);
                         }
@@ -562,10 +563,10 @@ public class asgn1_20CS10067 {
                     switch (in2) {
                         case 1->{
                             System.out.println("Enter id, name and zipcode of the shop");
-                            int id_sh = sc.nextInt();
+                            id_shops = sc.nextInt();
                             String name = sc.next();
                             int zip = sc.nextInt();
-                            shops temp_sh = new shops(id_sh, name, zip);
+                            shops temp_sh = new shops(id_shops, name, zip);
                             list_shops.add(temp_sh);
                         }
                         
@@ -671,10 +672,10 @@ public class asgn1_20CS10067 {
                     switch (in2) {
                         case 1->{
                             System.out.println("Enter the id, name and zipcode of the delivery agent");
-                            int id_dl = sc.nextInt();
+                            id_dlvry_agnt = sc.nextInt();
                             String name = sc.next();
                             int zip = sc.nextInt();
-                            delivery_agent temp_agnt = new delivery_agent(id_dl, name, zip);
+                            delivery_agent temp_agnt = new delivery_agent(id_dlvry_agnt, name, zip);
                             list_dlvry_agnt.add(temp_agnt);
                         }
                         
