@@ -11,8 +11,8 @@ import java.util.*;
     2. When the user enters the name and other elements of an entity, the id and name will be unique.
     3. The customer will always place an order for a single copy of a product.
     4. Product will be entered only after the manufacturer is created.
-    5. When a customer orders a product, he will be assigned a shop that was created first (The one that is front in the arraylist of shops and contains the required product).
-    6. The id of any entity is never negative.
+    5. When a customer orders a product, he will be assigned a shop that was created first and has the product available (The one that is front in the arraylist of shops and contains the required product).
+    6. The id and zipcode of any entity is never negative.
 
 */
 /*
@@ -96,24 +96,24 @@ class manufacturer extends entities{
 
 class customer extends entities{
     int zipcode;
-    ArrayList<product> prdcts_buyed;
+    ArrayList<product> prdcts_bought;
     
     customer(){
         this.id = -1;
-        this.zipcode = 0;
+        this.zipcode = -1;
         this.name = "name";
-        this.prdcts_buyed = new ArrayList<product>();
+        this.prdcts_bought = new ArrayList<product>();
     }
     
     customer(int id, String name, int zipcode){
         this.id = id;
         this.zipcode = zipcode;
         this.name = name;
-        this.prdcts_buyed = new ArrayList<product>();
+        this.prdcts_bought = new ArrayList<product>();
     }
 
     void add_prdct(product p){ // adds the product to the products list associated with customer
-        this.prdcts_buyed.add(p);
+        this.prdcts_bought.add(p);
     }
 
     void print_entities(){
@@ -121,8 +121,8 @@ class customer extends entities{
         System.out.println("Name: " + this.name);
         System.out.println("The products bought: ");
 
-        for (int i = 0; i < this.prdcts_buyed.size(); i++) {
-            prdcts_buyed.get(i).print_entities(i);
+        for (int i = 0; i < this.prdcts_bought.size(); i++) {
+            prdcts_bought.get(i).print_entities(i);
         }
     }
 }
@@ -150,7 +150,7 @@ class shops extends entities{
     shops(){
         this.id = -1;
         this.name = "name";
-        this.zipcode = 0;
+        this.zipcode = -1;
         this.inventory = new HashMap<product, Integer>();
         this.ords_to_prcss = new ArrayList<orders>();
     }
@@ -178,21 +178,21 @@ class delivery_agent extends entities{
     delivery_agent(){
         this.id = -1;
         this.name = "name";
-        this.zipcode = 0;
+        this.zipcode = -1;
         this.prdcts_dlvr = 0;
     }
-    delivery_agent(int id, String name, int zip, int dlvrd){
+    delivery_agent(int id, String name, int zip){
         this.id = id;
         this.name = name;
         this.zipcode = zip;
-        this.prdcts_dlvr = dlvrd;
+        this.prdcts_dlvr = 0;
     }
     void print_entities(){
-        System.out.println(this.id + " " + this.name + "\n number of products delivered: " + this.prdcts_dlvr);
+        System.out.println("Id: " + this.id + "\nName: " + this.name + "\nNumber of products delivered: " + this.prdcts_dlvr);
     }
 }
 
-class print_menu{
+class print_menu{ // prints menu for required entity when called
     void whole_menu(){
         System.out.println("Type 1 to work with entity Manufacture");
         System.out.println("Type 2 to work with entity Customer");
@@ -235,6 +235,7 @@ class print_menu{
         System.out.println("Type 3 to Print the details of Delivery Agents");
     }
 }
+
 public class asgn {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -243,20 +244,21 @@ public class asgn {
         print_menu prnt = new print_menu();
         ArrayList<product> list_prdcts = new ArrayList<product>(); // this arraylist store the products that are currently manufactured
         ArrayList<product> list_prdcts2 = new ArrayList<product>(); // this arraylist stores the products that are created till now
-        ArrayList<manufacturer> list_mnfctr = new ArrayList<manufacturer>();
-        ArrayList<customer> list_cstmr = new ArrayList<customer>();
-        ArrayList<shops> list_shops = new ArrayList<shops>();
-        ArrayList<delivery_agent> list_dlvry_agnt = new ArrayList<delivery_agent>();
+        ArrayList<manufacturer> list_mnfctr = new ArrayList<manufacturer>(); // this arraylist stores the manufacturers those are currently active
+        ArrayList<customer> list_cstmr = new ArrayList<customer>(); // this arraylist stores the customers those are currently active
+        ArrayList<shops> list_shops = new ArrayList<shops>(); // this arraylist stores the shops those are currently working
+        ArrayList<delivery_agent> list_dlvry_agnt = new ArrayList<delivery_agent>(); // this arraylist stores the delivery agents currently working
 
         int id_mnfct, id_prdct, id_cstmr, id_shops, id_dlvry_agnt;
 
         
-        while (true) {
+        while (true) { // this while loop runs till the user enters 0
             prnt.whole_menu();
             int in1 = sc.nextInt();
             if (in1 == 0) {
                 break;
             }
+
             switch (in1) {
                 case 1->{
                     System.out.println("Enter the operation that you want to do");
@@ -282,7 +284,7 @@ public class asgn {
                             int in3 = sc.nextInt();
 
                             for (manufacturer i : list_mnfctr) {
-                                if (in3 == i.id) { // finding the entire manufacture entity with the given id
+                                if (in3 == i.id) { // finding the entire manufacture entity list with the given id
                                     temp = i;
                                     break;
                                 }
@@ -345,8 +347,8 @@ public class asgn {
 
                             product temp_pr = new product(id_prdct, name_pr, name_mnf);
                             temp_mn.add_prdct(temp_pr);
-                            list_prdcts.add(temp_pr);
-                            list_prdcts2.add(temp_pr);
+                            list_prdcts.add(temp_pr); // adding the new product to the arraylist in which currently active products are stored
+                            list_prdcts2.add(temp_pr); // adding the new product to the arraylist in which all products are stored
                         }
                         
                         case 6->{
@@ -360,14 +362,14 @@ public class asgn {
                             name_mnf = sc.next();
                             name_pr = sc.next();
                             manufacturer temp_mn = new manufacturer();
-                            for (manufacturer i : list_mnfctr) { // finding the entire manufacure entity with the given name
+                            for (manufacturer i : list_mnfctr) { // finding the entire manufacure entity list with the given name
                                 if (i.name.equals(name_mnf)) {
                                     temp_mn = i;
                                     break;
                                 }
                             }
 
-                            for (product i : temp_mn.prdcts) {
+                            for (product i : temp_mn.prdcts) { // removing the products from products list storing the currently active products
                                 if (i.name.equals(name_pr)) {
                                     temp_mn.prdcts.remove(i);
                                     list_prdcts.remove(i);
@@ -410,7 +412,7 @@ public class asgn {
 
                             for (customer i : list_cstmr) {
                                 if (in3 == i.id) {
-                                    i.prdcts_buyed.clear(); // clearing array of the products bought by the customer
+                                    i.prdcts_bought.clear(); // clearing array of the products bought by the customer
                                     list_cstmr.remove(i);
                                     break;
                                 }
@@ -438,20 +440,20 @@ public class asgn {
                                 }
                             }
                         }
+
                         case 5->{
-                            System.out.println("Enter your id and zipcode, and the id of the product that you wanted to buy");
+                            System.out.println("Enter your id and the id of the product that you wanted to buy");
 
                             for (int i = 0; i < list_prdcts.size(); i++) {
                                 System.out.println((i+1) + ") " + list_prdcts.get(i).id + " " + list_prdcts.get(i).name);
                             }
 
                             int id_cst = sc.nextInt();
-                            int zip = sc.nextInt();
                             int id_pr = sc.nextInt();
 
                             customer temp_Cst = new customer();
 
-                            for (customer jCustomer : list_cstmr) {
+                            for (customer jCustomer : list_cstmr) { // getting the customer entity
                                 if (id_cst == jCustomer.id) {
                                     temp_Cst = jCustomer;
                                     break;
@@ -465,7 +467,7 @@ public class asgn {
                             boolean b3 = true; // for checking if any delivery agent with same zipcode is available.
 
                             product temp_pr = new product();
-                            for (product jProduct : list_prdcts2) {
+                            for (product jProduct : list_prdcts2) { // getting the product entity from the product arraylist storing all the products
                                 if (jProduct.id == id_pr) {
                                     temp_pr = jProduct;
                                     break;
@@ -474,7 +476,8 @@ public class asgn {
 
                             int min_dlv = Integer.MAX_VALUE;
                             delivery_agent dlv_temp = new delivery_agent();
-                            for (delivery_agent iAgent : list_dlvry_agnt) {
+
+                            for (delivery_agent iAgent : list_dlvry_agnt) { // checking if a delivery agent is present with same zipcode, if yes, then storing the delivery agent with least number of deliveries
                                 if (iAgent.zipcode == temp_Cst.zipcode) {
                                     if (iAgent.prdcts_dlvr < min_dlv) {
                                         min_dlv = iAgent.prdcts_dlvr;
@@ -484,14 +487,14 @@ public class asgn {
                                 }
                             }
 
-                            if (b3) {
+                            if (b3) { // if no delivery agent
                                 System.out.println("Sorry!! No delivery agent is there in your locality, we will try to make sure you won't face this issue again");
                                 continue;
                             }
 
                             shops temp_shop = new shops();
-                            for (shops iShops : list_shops) {
-                                if (iShops.zipcode == zip && b2) {
+                            for (shops iShops : list_shops) { // checking the shop that is enrolled first and has the product
+                                if (iShops.zipcode == temp_Cst.zipcode && b2) {
                                     temp_shop = iShops;
                                     b1 = false;
                                     b2 = temp_shop.inventory.containsKey(temp_pr);
@@ -501,11 +504,11 @@ public class asgn {
                                     }
                                 }
                             }
-                            if (b1) {
+                            if (b1) { // if no shop with same zipcode is present
                                 System.out.println("Sorry!! There is no Shop or Warehouse present in your locality");
                                 continue;
                             }
-                            else if (b2) {
+                            else if (b2) { // if product does not exist in any local shop
                                 System.out.println("Sorry!! The product is not available in any shop in your locality, we try to correct this issue");
                                 continue;
                             }
