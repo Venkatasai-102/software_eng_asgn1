@@ -63,6 +63,10 @@ class product extends entities{ // assuming that a product is made by a single m
     void print_entities(int i){
         System.out.println((i+1) + ") " + this.id + " " + this.name);
     }
+    
+    void print_prpty(){
+        System.out.println(this.id + " " + this.name);
+    }
 }
 
 class manufacturer extends entities{
