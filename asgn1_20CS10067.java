@@ -236,7 +236,7 @@ class print_menu{ // prints menu for required entity when called
     }
 }
 
-public class asgn {
+public class asgn1_20CS10067 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("\n\n\t\t*********** Welcome to Venkata Sai Enterprizes ***********\n\n");
