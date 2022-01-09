@@ -13,6 +13,8 @@ import java.util.*;
     4. Product will be entered only after the manufacturer is created.
     5. When a customer orders a product, he will be assigned a shop that was created first and has the product available (The one that is front in the arraylist of shops and contains the required product).
     6. The id and zipcode of any entity is never negative.
+    7. When user asks for process order, the first pending order will be processed
+    8. The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders.
 
 */
 /*
@@ -147,8 +149,6 @@ class orders{
 class shops extends entities{
     int zipcode;
     HashMap<product, Integer> inventory;
-
-
     ArrayList<orders> ords_to_prcss;
 
     shops(){
@@ -164,11 +164,19 @@ class shops extends entities{
         this.zipcode = zip;
         inventory = new HashMap<>();
     }
+    void print_entities(ArrayList<shops> list_sh){
+        int i = 1;
+        for (shops iShops1 : list_sh) {
+            System.out.println(i + ") " + iShops1.id + " " + iShops1.name + " " + iShops1.zipcode + "\nThe inventory of shop:\n" + iShops1.inventory);
+        }
+    }
     void include_order(orders ord){
         this.ords_to_prcss.add(ord);
     }
-    void process_order(ArrayList<delivery_agent> list_dlv, orders ord){
+    void process_order(ArrayList<delivery_agent> list_dlv){
         delivery_agent temp_dl = new delivery_agent();
+        orders ord = this.ords_to_prcss.get(0);
+
         temp_dl = ord.dlvr_agnt;
         this.ords_to_prcss.remove(ord);
 
@@ -186,12 +194,12 @@ class shops extends entities{
         temp_dl.prdcts_dlvr = temp_dl.prdcts_dlvr + 1;
         list_dlv.add(temp_dl);
     }
-    void add_prdcts(HashMap<product, Integer> invntry, product p, int num_copies){
-        boolean b1 = invntry.containsKey(p);
+    void add_prdcts(product p, int num_copies){
+        boolean b1 = this.inventory.containsKey(p);
         if (b1) {
-            num_copies = num_copies + invntry.get(p);
+            num_copies = num_copies + this.inventory.get(p);
         }
-        invntry.put(p, num_copies);
+        this.inventory.put(p, num_copies);
     }
 }
 
@@ -262,7 +270,7 @@ class print_menu{ // prints menu for required entity when called
 public class asgn1_20CS10067 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("\n\n\t\t*********** Welcome to Venkata Sai Enterprizes ***********\n\n");
+        System.out.println("\n\n\t\t***********  Welcome to Venkata Sai Medical Shop  ***********\n\n");
 
         print_menu prnt = new print_menu();
         ArrayList<product> list_prdcts = new ArrayList<product>(); // this arraylist store the products that are currently manufactured
@@ -546,6 +554,157 @@ public class asgn1_20CS10067 {
                         }
                     }
                 }
+
+                case 3->{
+                    System.out.println("Enter the operation that you wanted to do");
+                    prnt.shops_menu();
+                    int in2 = sc.nextInt();
+                    switch (in2) {
+                        case 1->{
+                            System.out.println("Enter id, name and zipcode of the shop");
+                            int id_sh = sc.nextInt();
+                            String name = sc.next();
+                            int zip = sc.nextInt();
+                            shops temp_sh = new shops(id_sh, name, zip);
+                            list_shops.add(temp_sh);
+                        }
+                        
+                        case 2->{
+                            shops temp_shops = new shops();
+                            System.out.println("Enter the id of the shop you want to delete");
+                            temp_shops.print_entities(list_shops);
+
+                            int id_sh = sc.nextInt();
+
+                            for (shops iShops : list_shops) {
+                                if (iShops.id == id_sh) {
+                                    temp_shops = iShops;
+                                    break;
+                                }
+                            }
+
+                            temp_shops.ords_to_prcss.clear();
+                            temp_shops.inventory.clear();
+                            list_shops.remove(temp_shops);
+                        }
+
+                        case 3->{
+                            shops temp_sh = new shops();
+                            temp_sh.print_entities(list_shops);
+                        }
+
+                        case 4->{
+                            System.out.println("Enter the id of the shop for which you want to print the list of inventory");
+                            int id_sh = sc.nextInt();
+                            shops temp_sh = new shops();
+
+                            for (shops iShops : list_shops) {
+                                if (id_sh == iShops.id) {
+                                    temp_sh = iShops;
+                                    break;
+                                }
+                            }
+
+                            System.out.println("The inventory of the shop is:");
+
+                            for (Map.Entry<product, Integer> i_inv : temp_sh.inventory.entrySet()) {
+                                System.out.print("Product: ");
+                                i_inv.getKey().print_prpty();
+                                System.out.println("Copies: " + i_inv.getValue());
+                            }
+                        }
+
+                        case 5->{
+                            shops temp_sh = new shops();
+                            product temp_pr = new product();
+
+                            System.out.println("Enter the id of the shop for which you want to enter the product, id of the product and number of copies of that product");
+
+                            temp_sh.print_entities(list_shops);
+                            int id_sh = sc.nextInt();
+                            int id_pr = sc.nextInt();
+                            int copies = sc.nextInt();
+
+                            for (shops iShops : list_shops) {
+                                if (id_sh == iShops.id) {
+                                    temp_sh = iShops;
+                                    break;
+                                }
+                            }
+
+                            for (product i_pr : list_prdcts2) {
+                                if (id_pr == i_pr.id) {
+                                    temp_pr = i_pr;
+                                    break;
+                                }
+                            }
+
+                            temp_sh.add_prdcts(temp_pr, copies);
+                        }
+
+                        case 6->{
+                            shops temp_sh = new shops();
+
+                            System.out.println("Enter the id of the shop for which you want to process the first order present in its pending delivery list");
+                            temp_sh.print_entities(list_shops);
+
+                            int id_sh = sc.nextInt();
+                            for (shops iShops : list_shops) {
+                                if (iShops.id == id_sh) {
+                                    temp_sh = iShops;
+                                    break;
+                                }
+                            }
+
+                            temp_sh.process_order(list_dlvry_agnt);
+                        }
+                        default->{
+                            System.out.println("Invalid input");
+                        }
+                    }
+                }
+
+                case 4->{
+                    System.out.println("Enter the operation that you wanted to do");
+                    prnt.dlvry_agnt_menu();
+                    int in2 = sc.nextInt();
+                    switch (in2) {
+                        case 1->{
+                            System.out.println("Enter the id, name and zipcode of the delivery agent");
+                            int id_dl = sc.nextInt();
+                            String name = sc.next();
+                            int zip = sc.nextInt();
+                            delivery_agent temp_agnt = new delivery_agent(id_dl, name, zip);
+                            list_dlvry_agnt.add(temp_agnt);
+                        }
+                        
+                        case 2->{
+                            System.out.println("Enter the id of the delivery agent whom you want to delete");
+                            for (delivery_agent iAgent : list_dlvry_agnt) {
+                                iAgent.print_entities();
+                            }
+
+                            int id_dl = sc.nextInt();
+
+                            for (delivery_agent iAgent : list_dlvry_agnt) {
+                                if (id_dl == iAgent.id) {
+                                    list_dlvry_agnt.remove(iAgent);
+                                }
+                            }
+                        }
+
+                        case 3->{
+                            for (delivery_agent iAgent : list_dlvry_agnt) {
+                                iAgent.print_entities();
+                            }
+                        }
+
+                        default->{
+                            System.out.println("Invalid input");
+                        }
+                    }
+                }
+
                 default->{
                     System.out.println("Invalid Input");
                 }
