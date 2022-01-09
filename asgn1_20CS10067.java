@@ -10,10 +10,10 @@ import java.util.*;
     1. Product is manufactured by a single manufacturer.
     2. When the user enters the name and other elements of an entity, the id and name will be unique.
     3. The customer will always place an order for a single copy of a product.
-    4. Product will be entered only after the manufacturer is created.
+    4. Product will be entered only after the manufacturer is created, else the manufacturer will be created instantaneously and add product to it.
     5. When a customer orders a product, he will be assigned a shop that was created first and has the product available (The one that is front in the arraylist of shops and contains the required product).
     6. The id and zipcode of any entity is never negative.
-    7. When user asks for process order, the first pending order will be processed
+    7. When user asks for process order, the first pending order will be processed.
     8. The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders.
 
 */
@@ -225,9 +225,8 @@ class delivery_agent extends entities{
 
 class print_menu{ // prints menu for required entity when called
     void whole_menu(){
-        System.out.println("Type 1 to work with entity Manufacture");
+        System.out.println("Type 1 to work with entity Manufacturer");
         System.out.println("Type 2 to work with entity Customer");
-        // System.out.println("Type 3 to work with entity Products");
         System.out.println("Type 3 to work with entity Shops and Warehouses");
         System.out.println("Type 4 to work with entity Delivery Agent");
         System.out.println("Type 0 to Exit");
@@ -247,18 +246,13 @@ class print_menu{ // prints menu for required entity when called
         System.out.println("Type 4 to Print the Purchases made by Customer");
         System.out.println("Type 5 to add an order from Customer"); // This will add a product to the list of products to that customer.
     }
-    // void prdcts_menu(){
-    //     System.out.println("Type 1 to Create a new Products");
-    //     System.out.println("Type 2 to Delete a Products");
-    //     System.out.println("Type 3 to Print the details of a Products");
-    // }
     void shops_menu(){
         System.out.println("Type 1 to Create a new Shop");
         System.out.println("Type 2 to Delete a Shop");
         System.out.println("Type 3 to Print the details of Shops");
         System.out.println("Type 4 to Print the Inventory a Shop");
         System.out.println("Type 5 to Add a certain number of copies of a Product to a Shop");
-        System.out.println("Type 6 to Process an Order from a Shop"); // This will automatically choose a delivery agent and prints out his details
+        System.out.println("Type 6 to Process an Order from a Shop"); // This will automatically choose a delivery agent.
     }
     void dlvry_agnt_menu(){
         System.out.println("Type 1 to Create a new Delivery Agent");
