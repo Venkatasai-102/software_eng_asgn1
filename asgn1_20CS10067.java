@@ -168,7 +168,12 @@ class shops extends entities{
     void print_entities(ArrayList<shops> list_sh){
         int i = 1;
         for (shops iShops1 : list_sh) {
-            System.out.println(i + ") " + iShops1.id + " " + iShops1.name + " " + iShops1.zipcode + "\nThe inventory of shop:\n" + iShops1.inventory);
+            System.out.println(i + ") " + iShops1.id + " " + iShops1.name + " " + iShops1.zipcode + "\nThe inventory of shop:");
+            for (Map.Entry<product, Integer> i_inv : iShops1.inventory.entrySet()) {
+                System.out.print("Product: ");
+                i_inv.getKey().print_prpty();
+                System.out.println("Copies: " + i_inv.getValue());
+            }
         }
     }
     void include_order(orders ord){
@@ -682,11 +687,15 @@ public class asgn1_20CS10067 {
 
                             int id_dl = sc.nextInt();
 
+                            delivery_agent temp_dlv = new delivery_agent();
+
                             for (delivery_agent iAgent : list_dlvry_agnt) {
                                 if (id_dl == iAgent.id) {
-                                    list_dlvry_agnt.remove(iAgent);
+                                    temp_dlv = iAgent;
                                 }
                             }
+
+                            list_dlvry_agnt.remove(temp_dlv);
                         }
 
                         case 3->{
