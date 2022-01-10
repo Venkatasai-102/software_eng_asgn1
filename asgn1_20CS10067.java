@@ -7,15 +7,20 @@ import java.util.*;
 
     Assumtions taken while writing the code:
 
-    1. Product is manufactured by a single manufacturer.
-    2. When the user enters the name and other elements of an entity, the id and name will be unique.
-    3. The customer will always place an order for a single copy of a product.
-    4. Product will be entered only after the manufacturer is created, else the manufacturer will be created instantaneously and add product to it.
-    5. When a customer orders a product, he will be assigned a shop that was created first and has the product available (The one that is front in the arraylist of shops and contains the required product).
-    6. The id and zipcode of any entity is never negative.
-    7. When user asks for process order, the first pending order will be processed.
-    8. The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders.
-    9. There are no spaces in name of any entity.
+    1.  Product is manufactured by a single manufacturer.
+    2.  When the user enters the name and other elements of an entity, the id and name will be unique.
+    3.  The customer will always place an order for a single copy of a product.
+    4.  Product will be entered only after the manufacturer is created, else the manufacturer will be created instantaneously and add product to it.
+    5.  When a customer orders a product, he will be assigned a shop that was created first and has the product available (The one that is front in the 
+        arraylist of shops and contains the required product).
+    6.  The id and zipcode of any entity is never negative.
+    7.  When user asks for process order, the first pending order will be processed.
+    8.  The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders.
+    9.  There are no spaces in name of any entity.
+    10. Customer's order will be confirmed only if there is an available shop with the required product and delivery agent is present in locality, otherwise,
+        customer will be promted a message saying that he can't order that.
+    11. If there one to be deleted, enter some random number to continue for the further operations.
+    12. User enters the id for every entity.
 
 */
 
@@ -149,6 +154,7 @@ class shops extends entities{
                 i_inv.getKey().print_prpty();
                 System.out.println("Copies: " + i_inv.getValue());
             }
+            i ++;
         }
     }
     void include_order(orders ord){
@@ -156,6 +162,10 @@ class shops extends entities{
     }
     void process_order(ArrayList<delivery_agent> list_dlv){
         delivery_agent temp_dl = new delivery_agent();
+        if (this.ords_to_prcss.size() == 0) {
+            System.out.println("Well Done!! There are no processes to be processed!");
+            return;
+        }
         orders ord = this.ords_to_prcss.get(0);
 
         temp_dl = ord.dlvr_agnt;
@@ -275,8 +285,24 @@ public class asgn1_20CS10067 {
                             System.out.println("Enter the name and id of the manufacturer");
                             String name = sc.next();
                             id_mnfct = sc.nextInt();
+
+                            boolean b1 = false;
+                            
+                            for (manufacturer iManufacturer1 : list_mnfctr){
+                                if (list_mnfctr.size() != 0 && iManufacturer1.id == id_mnfct) {
+                                    System.out.println("The manufacturer with id already exist, you can't create this manufacturer again!!");
+                                    b1 = true;
+                                    break;
+                                }
+                            }
+
+                            if(b1) { // if manufacturer already exist.
+                                continue;
+                            }
+
                             manufacturer temp = new manufacturer(id_mnfct, name);
                             list_mnfctr.add(temp);
+                            System.out.println("New Manufacturer created Successfully");
                         }
                         
                         case 2->{
@@ -326,11 +352,25 @@ public class asgn1_20CS10067 {
                             }
                         }
                         case 5->{
-                            System.out.println("Enter the name of the manufacturer and name and id of the product to be added");
+                            System.out.println("Enter the name of the manufacturer and name and id of the product to be added!!");
                             String name_mnf, name_pr;
                             name_mnf = sc.next();
                             name_pr = sc.next();
                             id_prdct = sc.nextInt();
+
+                            boolean b1 = false;
+
+                            for (product iProduct2 : list_prdcts2) {
+                                if (list_prdcts2.size() != 0 && iProduct2.id == id_prdct) {
+                                    b1 = true;
+                                    break;
+                                }
+                            }
+
+                            if(b1) {
+                                System.out.println("The product has been manufactured by another manufacuter, so you can't add this product");
+                                continue;
+                            }
 
                             Boolean b = true;
 
@@ -355,6 +395,7 @@ public class asgn1_20CS10067 {
                             temp_mn.add_prdct(temp_pr);
                             list_prdcts.add(temp_pr); // adding the new product to the arraylist in which currently active products are stored
                             list_prdcts2.add(temp_pr); // adding the new product to the arraylist in which all products are stored
+                            System.out.println("Successfully created a new product and added it to the manufacturer");
                         }
                         
                         case 6->{
@@ -402,9 +443,22 @@ public class asgn1_20CS10067 {
                             name = sc.next();
                             id_cstmr = sc.nextInt();
                             zip = sc.nextInt();
+
+                            boolean b1 = false;
+
+                            for (customer iCustomer : list_cstmr) {
+                                if (list_cstmr.size() != 0 && iCustomer.id == id_cstmr) {
+                                    b1 = true;
+                                    break;
+                                }
+                            }
                             
+                            if (b1) {
+                                System.out.println("There is a customer with same id, you can't enter this again!!");
+                            }
                             customer temp = new customer(id_cstmr, name, zip);
                             list_cstmr.add(temp);
+                            System.out.println("New Customer created Successfully");
                         }
                         
                         case 2->{
@@ -474,7 +528,7 @@ public class asgn1_20CS10067 {
                             boolean b3 = true; // for checking if any delivery agent with same zipcode is available.
 
                             product temp_pr = new product();
-                            for (product jProduct : list_prdcts2) { // getting the product entity from the product arraylist storing all the products
+                            for (product jProduct : list_prdcts2) { // getting the product entity from the product arraylist storing all the products.
                                 if (jProduct.id == id_pr) {
                                     temp_pr = jProduct;
                                     break;
@@ -483,8 +537,9 @@ public class asgn1_20CS10067 {
 
                             int min_dlv = Integer.MAX_VALUE;
                             delivery_agent dlv_temp = new delivery_agent();
-
-                            for (delivery_agent iAgent : list_dlvry_agnt) { // checking if a delivery agent is present with same zipcode, if yes, then storing the delivery agent with least number of deliveries
+                            
+                            // checking if a delivery agent is present with same zipcode, if yes, then storing the delivery agent with least number of deliveries
+                            for (delivery_agent iAgent : list_dlvry_agnt) { 
                                 if (iAgent.zipcode == temp_Cst.zipcode) {
                                     if (iAgent.prdcts_dlvr < min_dlv) {
                                         min_dlv = iAgent.prdcts_dlvr;
@@ -501,16 +556,16 @@ public class asgn1_20CS10067 {
 
                             shops temp_shop = new shops();
                             for (shops iShops : list_shops) { // checking the shop that is enrolled first and has the product
-                                if (iShops.zipcode == temp_Cst.zipcode && b2) {
+                                if (iShops.zipcode == temp_Cst.zipcode) {
                                     temp_shop = iShops;
                                     b1 = false;
-                                    b2 = temp_shop.inventory.containsKey(temp_pr);
-                                    if (b2) {
+                                    if (temp_shop.inventory.containsKey(temp_pr)) {
                                         b2 = false;
                                         break;
                                     }
                                 }
                             }
+
                             if (b1) { // if no shop with same zipcode is present
                                 System.out.println("Sorry!! There is no Shop or Warehouse present in your locality");
                                 continue;
@@ -520,10 +575,12 @@ public class asgn1_20CS10067 {
                                 continue;
                             }
 
+                            temp_Cst.prdcts_bought.add(temp_pr);
                             orders temp_ord = new orders();
                             temp_ord.dlvr_agnt = dlv_temp;
                             temp_ord.prdt_to_dlvr = temp_pr;
                             temp_shop.include_order(temp_ord);
+                            System.out.println("Product added to bought list Successfully");
                         }
                         default->{
                             System.out.println("Invalid input");
@@ -541,8 +598,24 @@ public class asgn1_20CS10067 {
                             id_shops = sc.nextInt();
                             String name = sc.next();
                             int zip = sc.nextInt();
+
+                            boolean b1 = false;
+
+                            for (shops iShops1 : list_shops){
+                                if (list_shops.size() != 0 && iShops1.id == id_shops) {
+                                    System.out.println("There is a shop with same id, you can't enter this again!!");
+                                    b1 = true;
+                                    break;
+                                }
+                            }
+
+                            if (b1) {
+                                continue;
+                            }
+
                             shops temp_sh = new shops(id_shops, name, zip);
                             list_shops.add(temp_sh);
+                            System.out.println("New Shop created Successfully");
                         }
                         
                         case 2->{
@@ -608,13 +681,19 @@ public class asgn1_20CS10067 {
                                 }
                             }
 
-                            for (product i_pr : list_prdcts2) {
+                            boolean b1 = true;
+                            for (product i_pr : list_prdcts) {
                                 if (id_pr == i_pr.id) {
                                     temp_pr = i_pr;
+                                    b1 = false;
                                     break;
                                 }
                             }
 
+                            if (b1){
+                                System.out.println("The required product is not being manufactured!! You can't add it to shops");
+                                continue;
+                            }
                             temp_sh.add_prdcts(temp_pr, copies);
                         }
 
@@ -650,8 +729,16 @@ public class asgn1_20CS10067 {
                             id_dlvry_agnt = sc.nextInt();
                             String name = sc.next();
                             int zip = sc.nextInt();
+                            
+
+                            for (delivery_agent iAgent1 : list_dlvry_agnt) {
+                                if (list_dlvry_agnt.size() != 0 && iAgent1.id == id_dlvry_agnt) {
+                                    System.out.println("There is a delivery agent with same id, So you can't add");
+                                }
+                            }
                             delivery_agent temp_agnt = new delivery_agent(id_dlvry_agnt, name, zip);
                             list_dlvry_agnt.add(temp_agnt);
+                            System.out.println("New Delivery agent created Sucessfully");
                         }
                         
                         case 2->{
