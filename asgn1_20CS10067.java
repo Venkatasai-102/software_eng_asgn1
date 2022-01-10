@@ -15,33 +15,8 @@ import java.util.*;
     6. The id and zipcode of any entity is never negative.
     7. When user asks for process order, the first pending order will be processed.
     8. The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders.
+    9. There are no spaces in name of any entity.
 
-*/
-/*
-The required elements or objects for each class.
-entities{
-    int id;
-    sting name;
-}
-manufacturer{
-    products [] list_of_products;
-}
-product{
-    string name_of_manufacturer;
-    manufacturer;
-}
-customers{
-    int zipcode;
-    products [] list_products;
-}
-delivery_agent{
-    int zipcode;
-    int no_of_products;
-}
-shops_n_warehouses{
-    int zipcode;
-    tuples of (product, count);`
-}
 */
 
 class entities{
