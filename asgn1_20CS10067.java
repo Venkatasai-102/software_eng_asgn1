@@ -163,6 +163,7 @@ class shops extends entities{
         this.name = name;
         this.zipcode = zip;
         inventory = new HashMap<>();
+        this.ords_to_prcss = new ArrayList<orders>();
     }
     void print_entities(ArrayList<shops> list_sh){
         int i = 1;
