@@ -110,6 +110,7 @@ class customer extends entities{
         for (int i = 0; i < this.prdcts_bought.size(); i++) {
             prdcts_bought.get(i).print_entities(i);
         }
+        System.out.println();
     }
 }
 
@@ -156,6 +157,7 @@ class shops extends entities{
             }
             i ++;
         }
+        System.out.println();
     }
     void include_order(orders ord){
         this.ords_to_prcss.add(ord);
@@ -163,7 +165,7 @@ class shops extends entities{
     void process_order(ArrayList<delivery_agent> list_dlv){
         delivery_agent temp_dl = new delivery_agent();
         if (this.ords_to_prcss.size() == 0) {
-            System.out.println("Well Done!! There are no processes to be processed!");
+            System.out.println("Well Done!! There are no processes to be processed!\n");
             return;
         }
         orders ord = this.ords_to_prcss.get(0);
@@ -216,39 +218,39 @@ class delivery_agent extends entities{
 
 class print_menu{ // prints menu for required entity when called
     void whole_menu(){
-        System.out.println("Type 1 to work with entity Manufacturer");
+        System.out.println("\nType 1 to work with entity Manufacturer");
         System.out.println("Type 2 to work with entity Customer");
         System.out.println("Type 3 to work with entity Shops and Warehouses");
         System.out.println("Type 4 to work with entity Delivery Agent");
-        System.out.println("Type 0 to Exit");
+        System.out.println("Type 0 to Exit\n");
     }
     void mnfctr_menu(){
-        System.out.println("Type 1 to Create a new Manufacturer");
+        System.out.println("\nType 1 to Create a new Manufacturer");
         System.out.println("Type 2 to Delete a Manufacturer");
         System.out.println("Type 3 to Print the details of Manufacturers");
         System.out.println("Type 4 to Print the details of Products manufactured by a Manufacturer");
         System.out.println("Type 5 to add a Product to the Manufacturer");
-        System.out.println("Type 6 to delete a Product from the Manufacturer");
+        System.out.println("Type 6 to delete a Product from the Manufacturer\n");
     }
     void cstmr_menu(){
-        System.out.println("Type 1 to Create a new Customer");
+        System.out.println("\nType 1 to Create a new Customer");
         System.out.println("Type 2 to Delete a Customer");
         System.out.println("Type 3 to Print the details of Customers");
         System.out.println("Type 4 to Print the Purchases made by Customer");
-        System.out.println("Type 5 to add an order from Customer"); // This will add a product to the list of products to that customer.
+        System.out.println("Type 5 to add an order from Customer\n"); // This will add a product to the list of products to that customer.
     }
     void shops_menu(){
-        System.out.println("Type 1 to Create a new Shop");
+        System.out.println("\nType 1 to Create a new Shop");
         System.out.println("Type 2 to Delete a Shop");
         System.out.println("Type 3 to Print the details of Shops");
         System.out.println("Type 4 to Print the Inventory a Shop");
         System.out.println("Type 5 to Add a certain number of copies of a Product to a Shop");
-        System.out.println("Type 6 to Process an Order from a Shop"); // This will automatically choose a delivery agent.
+        System.out.println("Type 6 to Process an Order from a Shop\n"); // This will automatically choose a delivery agent.
     }
     void dlvry_agnt_menu(){
-        System.out.println("Type 1 to Create a new Delivery Agent");
+        System.out.println("\nType 1 to Create a new Delivery Agent");
         System.out.println("Type 2 to Delete a Delivery Agent");
-        System.out.println("Type 3 to Print the details of Delivery Agents");
+        System.out.println("Type 3 to Print the details of Delivery Agents\n");
     }
 }
 
@@ -277,12 +279,12 @@ public class asgn1_20CS10067 {
 
             switch (in1) {
                 case 1->{
-                    System.out.println("Enter the operation that you want to do");
+                    System.out.println("\nEnter the operation that you want to do");
                     prnt.mnfctr_menu();
                     int inp2 = sc.nextInt();
                     switch (inp2) {
                         case 1->{
-                            System.out.println("Enter the name and id of the manufacturer");
+                            System.out.println("\nEnter the name and id of the manufacturer");
                             String name = sc.next();
                             id_mnfct = sc.nextInt();
 
@@ -290,7 +292,7 @@ public class asgn1_20CS10067 {
                             
                             for (manufacturer iManufacturer1 : list_mnfctr){
                                 if (list_mnfctr.size() != 0 && iManufacturer1.id == id_mnfct) {
-                                    System.out.println("The manufacturer with id already exist, you can't create this manufacturer again!!");
+                                    System.out.println("\nThe manufacturer with id already exist, you can't create this manufacturer again!!\n");
                                     b1 = true;
                                     break;
                                 }
@@ -302,11 +304,11 @@ public class asgn1_20CS10067 {
 
                             manufacturer temp = new manufacturer(id_mnfct, name);
                             list_mnfctr.add(temp);
-                            System.out.println("New Manufacturer created Successfully");
+                            System.out.println("\n*** New Manufacturer created Successfully ***\n");
                         }
                         
                         case 2->{
-                            System.out.println("Enter the id of manufacturer which you want to delete");
+                            System.out.println("\nEnter the id of manufacturer which you want to delete");
                             manufacturer temp = new manufacturer();
 
                             for (manufacturer i : list_mnfctr) {
@@ -337,7 +339,7 @@ public class asgn1_20CS10067 {
                         }
 
                         case 4->{
-                            System.out.println("Enter the name of the manufacturer for which you want to see details");
+                            System.out.println("\nEnter the name of the manufacturer for which you want to see details");
                             for (manufacturer i : list_mnfctr) {
                                 System.out.println(i.name);
                             }
@@ -352,7 +354,7 @@ public class asgn1_20CS10067 {
                             }
                         }
                         case 5->{
-                            System.out.println("Enter the name of the manufacturer and name and id of the product to be added!!");
+                            System.out.println("\nEnter the name of the manufacturer and name and id of the product to be added!!");
                             String name_mnf, name_pr;
                             name_mnf = sc.next();
                             name_pr = sc.next();
@@ -368,7 +370,7 @@ public class asgn1_20CS10067 {
                             }
 
                             if(b1) {
-                                System.out.println("The product has been manufactured by another manufacuter, so you can't add this product");
+                                System.out.println("\nThe product has been manufactured by another manufacuter, so you can't add this product\n");
                                 continue;
                             }
 
@@ -384,7 +386,7 @@ public class asgn1_20CS10067 {
                             }
 
                             if (b){
-                                System.out.println("The entered manufacturer was not created yet...\nCreating a new manufacurer...\nEnter the id of the manufacturer");
+                                System.out.println("\nThe entered manufacturer was not created yet...\nCreating a new manufacurer...\nEnter the id of the manufacturer\n");
                                 id_mnfct = sc.nextInt();
                                 manufacturer nw_mnfct = new manufacturer(id_mnfct, name_mnf);
                                 temp_mn = nw_mnfct;
@@ -395,11 +397,11 @@ public class asgn1_20CS10067 {
                             temp_mn.add_prdct(temp_pr);
                             list_prdcts.add(temp_pr); // adding the new product to the arraylist in which currently active products are stored
                             list_prdcts2.add(temp_pr); // adding the new product to the arraylist in which all products are stored
-                            System.out.println("Successfully created a new product and added it to the manufacturer");
+                            System.out.println("\n\n*** Successfully created a new product and added it to the manufacturer ***\n");
                         }
                         
                         case 6->{
-                            System.out.println("Enter the name of the manufacturer and the name of the product that you want to delete");
+                            System.out.println("\nEnter the name of the manufacturer and the name of the product that you want to delete");
 
                             for (manufacturer i : list_mnfctr) {
                                 i.print_entities();
@@ -432,14 +434,14 @@ public class asgn1_20CS10067 {
                 }
                 
                 case 2->{
-                    System.out.println("Enter the operation that you wanted to do");
+                    System.out.println("\nEnter the operation that you wanted to do");
                     prnt.cstmr_menu();
                     int in2 = sc.nextInt();
                     switch (in2) {
                         case 1->{
                             int zip;
                             String name;
-                            System.out.println("Enter the name, id and zipcode of the customer");
+                            System.out.println("\nEnter the name, id and zipcode of the customer");
                             name = sc.next();
                             id_cstmr = sc.nextInt();
                             zip = sc.nextInt();
@@ -454,15 +456,15 @@ public class asgn1_20CS10067 {
                             }
                             
                             if (b1) {
-                                System.out.println("There is a customer with same id, you can't enter this again!!");
+                                System.out.println("\nThere is a customer with same id, you can't enter this again!!\n");
                             }
                             customer temp = new customer(id_cstmr, name, zip);
                             list_cstmr.add(temp);
-                            System.out.println("New Customer created Successfully");
+                            System.out.println("\n*** New Customer created Successfully ***\n");
                         }
                         
                         case 2->{
-                            System.out.println("Enter the id of the customer that you want to delete");
+                            System.out.println("\nEnter the id of the customer that you want to delete");
 
                             
                             for (customer i : list_cstmr) {
@@ -487,7 +489,7 @@ public class asgn1_20CS10067 {
                         }
 
                         case 4->{
-                            System.out.println("Enter the name of the customer for whom you want to see the purchases");
+                            System.out.println("\nEnter the name of the customer for whom you want to see the purchases");
                             for (customer iCustomer : list_cstmr) {
                                 System.out.println(iCustomer.name);
                             }
@@ -503,7 +505,7 @@ public class asgn1_20CS10067 {
                         }
 
                         case 5->{
-                            System.out.println("Enter your id and the id of the product that you wanted to buy");
+                            System.out.println("\nEnter your id and the id of the product that you wanted to buy");
 
                             for (int i = 0; i < list_prdcts.size(); i++) {
                                 System.out.println((i+1) + ") " + list_prdcts.get(i).id + " " + list_prdcts.get(i).name);
@@ -521,7 +523,7 @@ public class asgn1_20CS10067 {
                                 }
                             }
 
-                            System.out.println("Checking if this is product is available in your area...");
+                            System.out.println("\n\nChecking if this is product is available in your area...\n\n");
 
                             boolean b1 = true; // for checking if a shop is present with the same zipcode.
                             boolean b2 = true; // for checking if the required product is present in any shop with same zipcode.
@@ -550,7 +552,7 @@ public class asgn1_20CS10067 {
                             }
 
                             if (b3) { // if no delivery agent
-                                System.out.println("Sorry!! No delivery agent is there in your locality, we will try to make sure you won't face this issue again");
+                                System.out.println("\nSorry!! No delivery agent is there in your locality, we will try to make sure you won't face this issue again\n");
                                 continue;
                             }
 
@@ -567,11 +569,11 @@ public class asgn1_20CS10067 {
                             }
 
                             if (b1) { // if no shop with same zipcode is present
-                                System.out.println("Sorry!! There is no Shop or Warehouse present in your locality");
+                                System.out.println("\nSorry!! There is no Shop or Warehouse present in your locality\n");
                                 continue;
                             }
                             else if (b2) { // if product does not exist in any local shop
-                                System.out.println("Sorry!! The product is not available in any shop in your locality, we try to correct this issue");
+                                System.out.println("\nSorry!! The product is not available in any shop in your locality, we try to correct this issue\n");
                                 continue;
                             }
 
@@ -580,7 +582,7 @@ public class asgn1_20CS10067 {
                             temp_ord.dlvr_agnt = dlv_temp;
                             temp_ord.prdt_to_dlvr = temp_pr;
                             temp_shop.include_order(temp_ord);
-                            System.out.println("Product added to bought list Successfully");
+                            System.out.println("\n\n*** Product added to bought list Successfully ***\n\n");
                         }
                         default->{
                             System.out.println("Invalid input");
@@ -589,12 +591,12 @@ public class asgn1_20CS10067 {
                 }
 
                 case 3->{
-                    System.out.println("Enter the operation that you wanted to do");
+                    System.out.println("\nEnter the operation that you wanted to do");
                     prnt.shops_menu();
                     int in2 = sc.nextInt();
                     switch (in2) {
                         case 1->{
-                            System.out.println("Enter id, name and zipcode of the shop");
+                            System.out.println("\nEnter id, name and zipcode of the shop");
                             id_shops = sc.nextInt();
                             String name = sc.next();
                             int zip = sc.nextInt();
@@ -603,7 +605,7 @@ public class asgn1_20CS10067 {
 
                             for (shops iShops1 : list_shops){
                                 if (list_shops.size() != 0 && iShops1.id == id_shops) {
-                                    System.out.println("There is a shop with same id, you can't enter this again!!");
+                                    System.out.println("\n\nThere is a shop with same id, you can't enter this again\n\n!!");
                                     b1 = true;
                                     break;
                                 }
@@ -615,12 +617,12 @@ public class asgn1_20CS10067 {
 
                             shops temp_sh = new shops(id_shops, name, zip);
                             list_shops.add(temp_sh);
-                            System.out.println("New Shop created Successfully");
+                            System.out.println("\n\n*** New Shop created Successfully ***\n\n");
                         }
                         
                         case 2->{
                             shops temp_shops = new shops();
-                            System.out.println("Enter the id of the shop you want to delete");
+                            System.out.println("\nEnter the id of the shop you want to delete");
                             temp_shops.print_entities(list_shops);
 
                             int id_sh = sc.nextInt();
@@ -643,7 +645,7 @@ public class asgn1_20CS10067 {
                         }
 
                         case 4->{
-                            System.out.println("Enter the id of the shop for which you want to print the list of inventory");
+                            System.out.println("\nEnter the id of the shop for which you want to print the list of inventory");
                             int id_sh = sc.nextInt();
                             shops temp_sh = new shops();
 
@@ -654,20 +656,21 @@ public class asgn1_20CS10067 {
                                 }
                             }
 
-                            System.out.println("The inventory of the shop is:");
+                            System.out.println("\nThe inventory of the shop is:");
 
                             for (Map.Entry<product, Integer> i_inv : temp_sh.inventory.entrySet()) {
                                 System.out.print("Product: ");
                                 i_inv.getKey().print_prpty();
                                 System.out.println("Copies: " + i_inv.getValue());
                             }
+                            System.out.println();
                         }
 
                         case 5->{
                             shops temp_sh = new shops();
                             product temp_pr = new product();
 
-                            System.out.println("Enter the id of the shop for which you want to enter the product, id of the product and number of copies of that product");
+                            System.out.println("\nEnter the id of the shop for which you want to enter the product, id of the product and number of copies of that product");
 
                             temp_sh.print_entities(list_shops);
                             int id_sh = sc.nextInt();
@@ -691,7 +694,7 @@ public class asgn1_20CS10067 {
                             }
 
                             if (b1){
-                                System.out.println("The required product is not being manufactured!! You can't add it to shops");
+                                System.out.println("\n\nThe required product is not being manufactured!! You can't add it to shops\n\n");
                                 continue;
                             }
                             temp_sh.add_prdcts(temp_pr, copies);
@@ -700,7 +703,7 @@ public class asgn1_20CS10067 {
                         case 6->{
                             shops temp_sh = new shops();
 
-                            System.out.println("Enter the id of the shop for which you want to process the first order present in its pending delivery list");
+                            System.out.println("\nEnter the id of the shop for which you want to process the first order present in its pending delivery list");
                             temp_sh.print_entities(list_shops);
 
                             int id_sh = sc.nextInt();
@@ -720,12 +723,12 @@ public class asgn1_20CS10067 {
                 }
 
                 case 4->{
-                    System.out.println("Enter the operation that you wanted to do");
+                    System.out.println("\nEnter the operation that you wanted to do");
                     prnt.dlvry_agnt_menu();
                     int in2 = sc.nextInt();
                     switch (in2) {
                         case 1->{
-                            System.out.println("Enter the id, name and zipcode of the delivery agent");
+                            System.out.println("\nEnter the id, name and zipcode of the delivery agent");
                             id_dlvry_agnt = sc.nextInt();
                             String name = sc.next();
                             int zip = sc.nextInt();
@@ -733,16 +736,16 @@ public class asgn1_20CS10067 {
 
                             for (delivery_agent iAgent1 : list_dlvry_agnt) {
                                 if (list_dlvry_agnt.size() != 0 && iAgent1.id == id_dlvry_agnt) {
-                                    System.out.println("There is a delivery agent with same id, So you can't add");
+                                    System.out.println("\n\nThere is a delivery agent with same id, So you can't add\n\n");
                                 }
                             }
                             delivery_agent temp_agnt = new delivery_agent(id_dlvry_agnt, name, zip);
                             list_dlvry_agnt.add(temp_agnt);
-                            System.out.println("New Delivery agent created Sucessfully");
+                            System.out.println("\n\n*** New Delivery agent created Sucessfully ***\n\n");
                         }
                         
                         case 2->{
-                            System.out.println("Enter the id of the delivery agent whom you want to delete");
+                            System.out.println("\nEnter the id of the delivery agent whom you want to delete");
                             for (delivery_agent iAgent : list_dlvry_agnt) {
                                 iAgent.print_entities();
                             }
@@ -777,7 +780,7 @@ public class asgn1_20CS10067 {
                 }
             }
         }
-        System.out.println("************ Thank You - Visit Again **************");
+        System.out.println("\n\n\t\t************ Thank You - Visit Again **************");
         sc.close();
     }
 }
