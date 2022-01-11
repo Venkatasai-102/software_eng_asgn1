@@ -409,25 +409,24 @@ public class asgn1_20CS10067 {
                         }
                         
                         case 6->{
-                            System.out.println("\nEnter the name of the manufacturer and the name of the product that you want to delete");
+                            System.out.println("\nEnter the id of the manufacturer and the id of the product that you want to delete");
 
                             for (manufacturer i : list_mnfctr) {
                                 i.print_entities();
                             }
 
-                            String name_mnf, name_pr;
-                            name_mnf = sc.next();
-                            name_pr = sc.next();
+                            id_mnfct = sc.nextInt();
+                            id_prdct = sc.nextInt();
                             manufacturer temp_mn = new manufacturer();
                             for (manufacturer i : list_mnfctr) { // finding the entire manufacure entity list with the given name
-                                if (i.name.equals(name_mnf)) {
+                                if (i.id == id_mnfct) {
                                     temp_mn = i;
                                     break;
                                 }
                             }
 
                             for (product i : temp_mn.prdcts) { // removing the products from products list storing the currently active products
-                                if (i.name.equals(name_pr)) {
+                                if (i.id == id_prdct) {
                                     temp_mn.prdcts.remove(i);
                                     list_prdcts.remove(i);
                                     break;
@@ -655,7 +654,7 @@ public class asgn1_20CS10067 {
 
                         case 4->{
                             System.out.println("\nEnter the id of the shop for which you want to print the list of inventory");
-                            
+
                             System.out.println("The list of shops: ");
                             for (shops iShops1 : list_shops){
                                 System.out.println(iShops1.id + "  " + iShops1.name);
