@@ -304,7 +304,7 @@ public class asgn1_20CS10067 {
 
                             manufacturer temp = new manufacturer(id_mnfct, name);
                             list_mnfctr.add(temp);
-                            System.out.println("\n*** New Manufacturer created Successfully ***\n");
+                            System.out.println("\n\t\t\t*** New Manufacturer created Successfully ***\n");
                         }
                         
                         case 2->{
@@ -354,9 +354,17 @@ public class asgn1_20CS10067 {
                             }
                         }
                         case 5->{
-                            System.out.println("\nEnter the name of the manufacturer and name and id of the product to be added!!");
+                            System.out.println("\nEnter the id of the manufacturer and name and id of the product to be added!!");
                             String name_mnf, name_pr;
-                            name_mnf = sc.next();
+
+                            System.out.println("The id and name of the manufacturers present are: ");
+                            int k = 1;
+                            for (manufacturer iManufacturer1 : list_mnfctr) {
+                                System.out.println(k + ") " + iManufacturer1.id + "  " + iManufacturer1.name);
+                                k ++;
+                            }
+
+                            id_mnfct = sc.nextInt();
                             name_pr = sc.next();
                             id_prdct = sc.nextInt();
 
@@ -378,7 +386,7 @@ public class asgn1_20CS10067 {
 
                             manufacturer temp_mn = new manufacturer();
                             for (manufacturer i : list_mnfctr) {
-                                if (i.name.equals(name_mnf)) {
+                                if (i.id == id_mnfct) {
                                     temp_mn = i;
                                     b = false;
                                     break;
@@ -386,18 +394,18 @@ public class asgn1_20CS10067 {
                             }
 
                             if (b){
-                                System.out.println("\nThe entered manufacturer was not created yet...\nCreating a new manufacurer...\nEnter the id of the manufacturer\n");
-                                id_mnfct = sc.nextInt();
+                                System.out.println("\nThe entered manufacturer was not created yet...\nCreating a new manufacurer...\nEnter the name of the manufacturer\n");
+                                name_mnf = sc.next();
                                 manufacturer nw_mnfct = new manufacturer(id_mnfct, name_mnf);
                                 temp_mn = nw_mnfct;
                                 list_mnfctr.add(nw_mnfct);
                             }
 
-                            product temp_pr = new product(id_prdct, name_pr, name_mnf);
+                            product temp_pr = new product(id_prdct, name_pr, temp_mn.name);
                             temp_mn.add_prdct(temp_pr);
                             list_prdcts.add(temp_pr); // adding the new product to the arraylist in which currently active products are stored
                             list_prdcts2.add(temp_pr); // adding the new product to the arraylist in which all products are stored
-                            System.out.println("\n\n*** Successfully created a new product and added it to the manufacturer ***\n");
+                            System.out.println("\n\n\t\t\t*** Successfully created a new product and added it to the manufacturer ***\n");
                         }
                         
                         case 6->{
@@ -460,7 +468,7 @@ public class asgn1_20CS10067 {
                             }
                             customer temp = new customer(id_cstmr, name, zip);
                             list_cstmr.add(temp);
-                            System.out.println("\n*** New Customer created Successfully ***\n");
+                            System.out.println("\n\t\t\t*** New Customer created Successfully ***\n");
                         }
                         
                         case 2->{
@@ -507,7 +515,8 @@ public class asgn1_20CS10067 {
                         case 5->{
                             System.out.println("\nEnter your id and the id of the product that you wanted to buy");
 
-                            for (int i = 0; i < list_prdcts.size(); i++) {
+
+                            for (int i = 0; i < list_prdcts2.size(); i++) {
                                 System.out.println((i+1) + ") " + list_prdcts.get(i).id + " " + list_prdcts.get(i).name);
                             }
 
@@ -617,7 +626,7 @@ public class asgn1_20CS10067 {
 
                             shops temp_sh = new shops(id_shops, name, zip);
                             list_shops.add(temp_sh);
-                            System.out.println("\n\n*** New Shop created Successfully ***\n\n");
+                            System.out.println("\n\n\t\t\t*** New Shop created Successfully ***\n\n");
                         }
                         
                         case 2->{
@@ -646,6 +655,12 @@ public class asgn1_20CS10067 {
 
                         case 4->{
                             System.out.println("\nEnter the id of the shop for which you want to print the list of inventory");
+                            
+                            System.out.println("The list of shops: ");
+                            for (shops iShops1 : list_shops){
+                                System.out.println(iShops1.id + "  " + iShops1.name);
+                            }
+                            
                             int id_sh = sc.nextInt();
                             shops temp_sh = new shops();
 
@@ -672,7 +687,16 @@ public class asgn1_20CS10067 {
 
                             System.out.println("\nEnter the id of the shop for which you want to enter the product, id of the product and number of copies of that product");
 
+                            int k = 0;
+                            System.out.println("Printing the available products to be added: ");
+                            for (product iProduct1 : list_prdcts){
+                                iProduct1.print_entities(k);
+                                k ++;
+                            }
+
+                            System.out.println("\n\nThe list of shops along with their inventories are: ");
                             temp_sh.print_entities(list_shops);
+
                             int id_sh = sc.nextInt();
                             int id_pr = sc.nextInt();
                             int copies = sc.nextInt();
@@ -741,7 +765,7 @@ public class asgn1_20CS10067 {
                             }
                             delivery_agent temp_agnt = new delivery_agent(id_dlvry_agnt, name, zip);
                             list_dlvry_agnt.add(temp_agnt);
-                            System.out.println("\n\n*** New Delivery agent created Sucessfully ***\n\n");
+                            System.out.println("\n\n\t\t\t*** New Delivery agent created Sucessfully ***\n\n");
                         }
                         
                         case 2->{
