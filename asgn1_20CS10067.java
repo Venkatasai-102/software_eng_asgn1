@@ -15,15 +15,17 @@ import java.util.*;
         arraylist of shops and contains the required product).
     6.  The id and zipcode of any entity is never negative.
     7.  When user asks for process order, the first pending order will be processed.
-    8.  The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders.
-    9.  There are no spaces in name of any entity.
+    8.  The delivery agent with lowest deliveries is assigned a new delivery according to unprocessed orders, i.e., when a customer adds product successfully the 
+        count of number of deliveries done increases.
+*** 9.  There are no spaces in name of any entity.(**** IMPORTANT ****)
     10. Customer's order will be confirmed only if there is an available shop with the required product and delivery agent is present in locality, otherwise,
         customer will be promted a message saying that he can't order that.
     11. If there one to be deleted, enter some random number to continue for the further operations.
-    12. User enters the id for every entity.
+    12. User enters the id for every entity he creates.
 
 */
 
+// this class is inherited by other classes for the elements id and name
 class entities{
     int id;
     String name;
@@ -43,11 +45,11 @@ class product extends entities{ // assuming that a product is made by a single m
         this.name = name;
     }
     void print_entities(int i){
-        System.out.println((i+1) + ") " + this.id + " " + this.name);
+        System.out.println((i+1) + ") " + this.id + " " + this.name); // prints in the format of "s.no) id name"
     }
     
     void print_prpty(){
-        System.out.println(this.id + " " + this.name);
+        System.out.println(this.id + " " + this.name); // prints id and name
     }
 }
 
@@ -73,7 +75,7 @@ class manufacturer extends entities{
         System.out.println("Name: " + this.name);
         System.out.println("The products manufactured: ");
 
-        for (int i = 0; i < this.prdcts.size(); i++) {
+        for (int i = 0; i < this.prdcts.size(); i++) { // prints products manufactured by that particular manufacturer currently. 
             prdcts.get(i).print_entities(i);
         }
         System.out.println();
@@ -98,8 +100,13 @@ class customer extends entities{
         this.prdcts_bought = new ArrayList<product>();
     }
 
-    void add_prdct(product p){ // adds the product to the products list associated with customer
+    void add_prdct(product p, delivery_agent temp_dl, ArrayList<delivery_agent> list_dlv){ // adds the product to the products list associated with customer
+        
         this.prdcts_bought.add(p);
+        // updating the number of products delivered by a delivery agent
+        list_dlv.remove(temp_dl);
+        temp_dl.prdcts_dlvr = temp_dl.prdcts_dlvr + 1;
+        list_dlv.add(temp_dl);
     }
 
     void print_entities(){
@@ -114,7 +121,7 @@ class customer extends entities{
     }
 }
 
-class orders{
+class orders{ // this is for storing the orders to be processed by a shop
     product prdt_to_dlvr;
     delivery_agent dlvr_agnt;
     orders(){
@@ -146,7 +153,7 @@ class shops extends entities{
         inventory = new HashMap<>();
         this.ords_to_prcss = new ArrayList<orders>();
     }
-    void print_entities(ArrayList<shops> list_sh){
+    void print_entities(ArrayList<shops> list_sh){ // prints shops name and its properties
         int i = 1;
         for (shops iShops1 : list_sh) {
             System.out.println(i + ") " + iShops1.id + " " + iShops1.name + " " + iShops1.zipcode + "\nThe inventory of shop:");
@@ -159,35 +166,30 @@ class shops extends entities{
         }
         System.out.println();
     }
-    void include_order(orders ord){
+    void include_order(orders ord){ // when a customer orders a product in this shop, it will get added to the shop's list of orders to be processed
         this.ords_to_prcss.add(ord);
     }
-    void process_order(ArrayList<delivery_agent> list_dlv){
-        delivery_agent temp_dl = new delivery_agent();
+    void process_order(){ // this processes the first order pending in it's list of orders to be processed
         if (this.ords_to_prcss.size() == 0) {
             System.out.println("Well Done!! There are no processes to be processed!\n");
             return;
         }
         orders ord = this.ords_to_prcss.get(0);
 
-        temp_dl = ord.dlvr_agnt;
         this.ords_to_prcss.remove(ord);
 
-        int num_copies = this.inventory.get(ord.prdt_to_dlvr) - 1;
+        int num_copies = this.inventory.get(ord.prdt_to_dlvr) - 1; // the copies in the inventory of the shop is reduced
 
         if (num_copies == 0) {
-            this.inventory.remove(ord.prdt_to_dlvr); // if the number of copies of the given product becomes 0, remove it
+            this.inventory.remove(ord.prdt_to_dlvr); // if the number of copies of the given product becomes 0, remove it from the shop's list of available products
         }
         else{
             this.inventory.put(ord.prdt_to_dlvr, num_copies); // else update the number of copies in the inventory of shop
         }
 
-        // updating the number of products delivered by a delivery agent
-        list_dlv.remove(temp_dl);
-        temp_dl.prdcts_dlvr = temp_dl.prdcts_dlvr + 1;
-        list_dlv.add(temp_dl);
+        
     }
-    void add_prdcts(product p, int num_copies){
+    void add_prdcts(product p, int num_copies){ // the new products of required number of copies will be added to the shop from the manufacturer
         boolean b1 = this.inventory.containsKey(p);
         if (b1) {
             num_copies = num_copies + this.inventory.get(p);
@@ -278,12 +280,12 @@ public class asgn1_20CS10067 {
             }
 
             switch (in1) {
-                case 1->{
+                case 1->{ // working with manufacturer
                     System.out.println("\nEnter the operation that you want to do");
                     prnt.mnfctr_menu();
                     int inp2 = sc.nextInt();
                     switch (inp2) {
-                        case 1->{
+                        case 1->{ // adding a new manufacturer
                             System.out.println("\nEnter the name and id of the manufacturer");
                             String name = sc.next();
                             id_mnfct = sc.nextInt();
@@ -307,7 +309,7 @@ public class asgn1_20CS10067 {
                             System.out.println("\n\t\t\t*** New Manufacturer created Successfully ***\n");
                         }
                         
-                        case 2->{
+                        case 2->{ // delete a manufacturer
                             System.out.println("\nEnter the id of manufacturer which you want to delete");
                             manufacturer temp = new manufacturer();
 
@@ -332,13 +334,13 @@ public class asgn1_20CS10067 {
                             list_mnfctr.remove(temp); // removing the manufacturer to be deleted from the manufacture arraylist
                         }
                         
-                        case 3->{
+                        case 3->{ // printing the details of all manufacturers
                             for (manufacturer i : list_mnfctr) {
                                 i.print_entities();
                             }
                         }
 
-                        case 4->{
+                        case 4->{ // printing the details of a particular manufacturer
                             System.out.println("\nEnter the name of the manufacturer for which you want to see details");
                             for (manufacturer i : list_mnfctr) {
                                 System.out.println(i.name);
@@ -353,7 +355,7 @@ public class asgn1_20CS10067 {
                                 }
                             }
                         }
-                        case 5->{
+                        case 5->{ // to add a new product to the manufacturer
                             System.out.println("\nEnter the id of the manufacturer and name and id of the product to be added!!");
                             String name_mnf, name_pr;
 
@@ -408,7 +410,7 @@ public class asgn1_20CS10067 {
                             System.out.println("\n\n\t\t\t*** Successfully created a new product and added it to the manufacturer ***\n");
                         }
                         
-                        case 6->{
+                        case 6->{ // delete a product from the manufacturer
                             System.out.println("\nEnter the id of the manufacturer and the id of the product that you want to delete");
 
                             for (manufacturer i : list_mnfctr) {
@@ -440,12 +442,12 @@ public class asgn1_20CS10067 {
                     }
                 }
                 
-                case 2->{
+                case 2->{ // working with customer
                     System.out.println("\nEnter the operation that you wanted to do");
                     prnt.cstmr_menu();
                     int in2 = sc.nextInt();
                     switch (in2) {
-                        case 1->{
+                        case 1->{ // creating a new customer
                             int zip;
                             String name;
                             System.out.println("\nEnter the name, id and zipcode of the customer");
@@ -470,7 +472,7 @@ public class asgn1_20CS10067 {
                             System.out.println("\n\t\t\t*** New Customer created Successfully ***\n");
                         }
                         
-                        case 2->{
+                        case 2->{ // deleting a customer
                             System.out.println("\nEnter the id of the customer that you want to delete");
 
                             
@@ -489,13 +491,13 @@ public class asgn1_20CS10067 {
                             }
                         }
 
-                        case 3->{
+                        case 3->{ // printing details of all customers
                             for (customer iCustomer : list_cstmr) {
                                 iCustomer.print_entities();
                             }
                         }
 
-                        case 4->{
+                        case 4->{ // to check the purchases of a paticular customer
                             System.out.println("\nEnter the name of the customer for whom you want to see the purchases");
                             for (customer iCustomer : list_cstmr) {
                                 System.out.println(iCustomer.name);
@@ -511,7 +513,7 @@ public class asgn1_20CS10067 {
                             }
                         }
 
-                        case 5->{
+                        case 5->{ // add a product to the customer
                             System.out.println("\nEnter your id and the id of the product that you wanted to buy");
 
 
@@ -585,7 +587,7 @@ public class asgn1_20CS10067 {
                                 continue;
                             }
 
-                            temp_Cst.prdcts_bought.add(temp_pr);
+                            temp_Cst.add_prdct(temp_pr, dlv_temp, list_dlvry_agnt);
                             orders temp_ord = new orders();
                             temp_ord.dlvr_agnt = dlv_temp;
                             temp_ord.prdt_to_dlvr = temp_pr;
@@ -598,12 +600,12 @@ public class asgn1_20CS10067 {
                     }
                 }
 
-                case 3->{
+                case 3->{ // working with the shops
                     System.out.println("\nEnter the operation that you wanted to do");
                     prnt.shops_menu();
                     int in2 = sc.nextInt();
                     switch (in2) {
-                        case 1->{
+                        case 1->{ // adding a new shop
                             System.out.println("\nEnter id, name and zipcode of the shop");
                             id_shops = sc.nextInt();
                             String name = sc.next();
@@ -628,7 +630,7 @@ public class asgn1_20CS10067 {
                             System.out.println("\n\n\t\t\t*** New Shop created Successfully ***\n\n");
                         }
                         
-                        case 2->{
+                        case 2->{ // deleting a shop
                             shops temp_shops = new shops();
                             System.out.println("\nEnter the id of the shop you want to delete");
                             temp_shops.print_entities(list_shops);
@@ -647,12 +649,12 @@ public class asgn1_20CS10067 {
                             list_shops.remove(temp_shops);
                         }
 
-                        case 3->{
+                        case 3->{ // printing details of all shops
                             shops temp_sh = new shops();
                             temp_sh.print_entities(list_shops);
                         }
 
-                        case 4->{
+                        case 4->{ // printing inventory of a particular shop
                             System.out.println("\nEnter the id of the shop for which you want to print the list of inventory");
 
                             System.out.println("The list of shops: ");
@@ -680,7 +682,7 @@ public class asgn1_20CS10067 {
                             System.out.println();
                         }
 
-                        case 5->{
+                        case 5->{ // adding some number of copies of a particular product to a particular shop
                             shops temp_sh = new shops();
                             product temp_pr = new product();
 
@@ -723,7 +725,7 @@ public class asgn1_20CS10067 {
                             temp_sh.add_prdcts(temp_pr, copies);
                         }
 
-                        case 6->{
+                        case 6->{ // process the first pending order of a particular shop
                             shops temp_sh = new shops();
 
                             System.out.println("\nEnter the id of the shop for which you want to process the first order present in its pending delivery list");
@@ -737,7 +739,7 @@ public class asgn1_20CS10067 {
                                 }
                             }
 
-                            temp_sh.process_order(list_dlvry_agnt);
+                            temp_sh.process_order();
                         }
                         default->{
                             System.out.println("Invalid input");
@@ -745,12 +747,12 @@ public class asgn1_20CS10067 {
                     }
                 }
 
-                case 4->{
+                case 4->{ // working with delivery agent
                     System.out.println("\nEnter the operation that you wanted to do");
                     prnt.dlvry_agnt_menu();
                     int in2 = sc.nextInt();
                     switch (in2) {
-                        case 1->{
+                        case 1->{ // adding a new delivery agent
                             System.out.println("\nEnter the id, name and zipcode of the delivery agent");
                             id_dlvry_agnt = sc.nextInt();
                             String name = sc.next();
@@ -767,7 +769,7 @@ public class asgn1_20CS10067 {
                             System.out.println("\n\n\t\t\t*** New Delivery agent created Sucessfully ***\n\n");
                         }
                         
-                        case 2->{
+                        case 2->{ // deleting a delivery agent
                             System.out.println("\nEnter the id of the delivery agent whom you want to delete");
                             for (delivery_agent iAgent : list_dlvry_agnt) {
                                 iAgent.print_entities();
@@ -786,7 +788,7 @@ public class asgn1_20CS10067 {
                             list_dlvry_agnt.remove(temp_dlv);
                         }
 
-                        case 3->{
+                        case 3->{ // printing deltails of all delivery agent
                             for (delivery_agent iAgent : list_dlvry_agnt) {
                                 iAgent.print_entities();
                             }
