@@ -616,7 +616,7 @@ public class asgn1_20CS10067 {
 
                             for (shops iShops1 : list_shops){
                                 if (list_shops.size() != 0 && iShops1.id == id_shops) {
-                                    System.out.println("\n\nThere is a shop with same id, you can't enter this again\n\n!!");
+                                    System.out.println("\n\nThere is a shop with same id, you can't enter this again!!\n\n");
                                     b1 = true;
                                     break;
                                 }
