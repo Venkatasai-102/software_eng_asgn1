@@ -466,6 +466,7 @@ public class asgn1_20CS10067 {
                             
                             if (b1) {
                                 System.out.println("\nThere is a customer with same id, you can't enter this again!!\n");
+                                continue;
                             }
                             customer temp = new customer(id_cstmr, name, zip);
                             list_cstmr.add(temp);
@@ -758,11 +759,17 @@ public class asgn1_20CS10067 {
                             String name = sc.next();
                             int zip = sc.nextInt();
                             
-
+                            boolean b1 = false;
                             for (delivery_agent iAgent1 : list_dlvry_agnt) {
                                 if (list_dlvry_agnt.size() != 0 && iAgent1.id == id_dlvry_agnt) {
                                     System.out.println("\n\nThere is a delivery agent with same id, So you can't add\n\n");
+                                    b1 = true;
+                                    break;
                                 }
+                            }
+
+                            if (b1) {
+                                continue;
                             }
                             delivery_agent temp_agnt = new delivery_agent(id_dlvry_agnt, name, zip);
                             list_dlvry_agnt.add(temp_agnt);
